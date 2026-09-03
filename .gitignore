@@ -2,5 +2,8 @@
 .env
 data/uploads/*
 data/chroma_db/*
+#'!' means don't ignore this specific one
+!data/uploads/.gitkeep  
+!data/chroma_db/.gitkeep
 __pycache__/
 *.pyc
