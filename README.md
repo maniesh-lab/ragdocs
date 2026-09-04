@@ -87,6 +87,7 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 Add a free Groq API key from [console.groq.com](https://console.groq.com) to `.env`.
+
 **5. Start the backend**
 ```bash
 uvicorn app.main:app --reload

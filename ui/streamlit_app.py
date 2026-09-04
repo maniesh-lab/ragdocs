@@ -1,7 +1,13 @@
+import os
+import sys
+import uuid
 import streamlit as st
-import requests
-
-API_URL = "http://127.0.0.1:8000"
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
+from app.services.ingestion import process_document
+from app.services.embeddings import embed_chunks
+from app.services.vectorstore import add_chunks, query_chunks
+from app.services.llm import get_answer
 
 st.set_page_config(page_title="ragdocs", page_icon="📄", layout="centered")
 
@@ -33,25 +39,29 @@ with st.sidebar:
         uploaded_file = st.file_uploader("Upload a PDF", type="pdf")
 
         if uploaded_file is not None:
-            with st.spinner("Reading and indexing document... this can take a minute for large files"):
-                files = {"file": (uploaded_file.name, uploaded_file.getvalue(), "application/pdf")}
+            if not uploaded_file.name.lower().endswith(".pdf"):
+                st.error("Only PDF files are supported.")
+            else:
+                with st.spinner("Reading and indexing document... this can take a minute for large files"):
+                    document_id = str(uuid.uuid4())
+                    file_path = f"data/uploads/{uploaded_file.name}"
 
-                try:
-                    response = requests.post(f"{API_URL}/upload", files=files, timeout=120)
-                except requests.exceptions.ConnectionError:
-                    st.error("Can't reach the backend. Is the FastAPI server running?")
-                    st.stop()
-                except requests.exceptions.Timeout:
-                    st.error("The request timed out. The document may be too large.")
-                    st.stop()
-                else:
-                    if response.status_code != 200:
-                        st.error(response.json()["detail"])
-                    else:
-                        data = response.json()
-                        st.session_state.document_id = data["document_id"]
-                        st.session_state.filename = data["filename"]
-                        st.rerun()
+                    with open(file_path, "wb") as f:
+                        f.write(uploaded_file.getvalue())
+
+                    try:
+                        chunks = process_document(file_path)
+
+                        if len(chunks) == 0:
+                            st.error("No readable text found in this PDF. It may be scanned/image-only.")
+                        else:
+                            chunks = embed_chunks(chunks)
+                            add_chunks(chunks, document_id)
+                            st.session_state.document_id = document_id
+                            st.session_state.filename = uploaded_file.name
+                            st.rerun()
+                    except Exception as e:
+                        st.error(f"Something went wrong processing this file: {e}")
     else:
         st.success(f"📎 {st.session_state.filename}")
         if st.button("Upload a different document"):
@@ -82,30 +92,21 @@ else:
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
                 try:
-                    response = requests.post(
-                        f"{API_URL}/chat",
-                        params={"question": question, "document_id": st.session_state.document_id},
-                        timeout=60,
-                    )
-                except requests.exceptions.ConnectionError:
-                    st.error("Can't reach the backend. Is the FastAPI server running?")
-                    st.stop()
-                except requests.exceptions.Timeout:
-                    st.error("The request timed out.")
-                    st.stop()
-                else:
-                    if response.status_code != 200:
-                        st.error(response.json()["detail"])
+                    matches = query_chunks(question, st.session_state.document_id)
+
+                    if len(matches) == 0:
+                        st.error("No document found. Please upload a document first.")
                         st.stop()
-                    else:
-                        data = response.json()
-                        answer = data["answer"]
-                        sources = data["sources"]
+
+                    answer = get_answer(question, matches)
+                except Exception as e:
+                    st.error(f"Something went wrong: {e}")
+                    st.stop()
 
             st.write(answer)
             with st.expander("View sources"):
-                for s in sources:
+                for s in matches:
                     st.caption(f"Page {s['page']} · distance {s['distance']:.3f}")
                     st.write(s["text"][:300] + "...")
 
-        st.session_state.messages.append({"role": "assistant", "content": answer, "sources": sources})
+        st.session_state.messages.append({"role": "assistant", "content": answer, "sources": matches})
