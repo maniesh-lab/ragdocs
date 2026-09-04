@@ -8,15 +8,19 @@ from app.services.embeddings import model
 client = chromadb.PersistentClient(path=settings.chroma_persist_dir)
 
 # a "collection" is like a table.
-collection = client.get_or_create_collection(name="documents")
+def get_collection_for_document(document_id: str):
+    return client.get_or_create_collection(name=document_id)
 
 
-def add_chunks(chunks: list[dict]):
+
+def add_chunks(chunks: list[dict], document_id: str):
+
+    collection = get_collection_for_document(document_id)
 
     # Chroma needs a unique string ID per entry. We build one from the
     # source filename + page number + position in the list, so IDs never collide.
     # PTR: source is just file_path - look in ingestion
-    ids = [f"{c['source']}-{c['page']}-{i}" for i, c in enumerate(chunks)]
+    ids = [f"{document_id}-{i}" for i in range(len(chunks))]
 
     # Chroma wants plain lists, not numpy arrays — .tolist() converts each
     # embedding vector into a normal Python list of numbers.
@@ -28,15 +32,14 @@ def add_chunks(chunks: list[dict]):
     # here, so we can tell the user which file/page an answer came from.
     metadatas = [{"source": c["source"], "page": c["page"]} for c in chunks]
 
-    collection.add(
-        ids=ids,
-        embeddings=embeddings,
-        documents=documents,
-        metadatas=metadatas,
-    )
+    collection.add(ids=ids, embeddings=embeddings, documents=documents, metadatas=metadatas)
 
 
-def query_chunks(question: str, n_results: int = 5) -> list[dict]:
+
+
+def query_chunks(question: str,document_id:str, n_results: int = 5) -> list[dict]:
+
+    collection = get_collection_for_document(document_id)
     question_embedding = model.encode([question])[0].tolist()
 
     #.query is a function used to search for the closest vectors stored in collection above
