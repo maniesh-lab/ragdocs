@@ -45,7 +45,7 @@ def query_chunks(question: str, n_results: int = 5) -> list[dict]:
 
     matches = []
     for doc, meta, dist in zip(
-        results["documents"][0],
+        results["documents"][0], #inside [0] slot is a list of all 5 matched chunk texts, ordered from closest to least close
         results["metadatas"][0],
         results["distances"][0],
     ):
