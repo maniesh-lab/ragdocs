@@ -35,11 +35,23 @@ with st.sidebar:
         if uploaded_file is not None:
             with st.spinner("Reading and indexing document... this can take a minute for large files"):
                 files = {"file": (uploaded_file.name, uploaded_file.getvalue(), "application/pdf")}
-                response = requests.post(f"{API_URL}/upload", files=files)
-                data = response.json()
-                st.session_state.document_id = data["document_id"]
-                st.session_state.filename = data["filename"]
-            st.rerun()
+
+                try:
+                    response = requests.post(f"{API_URL}/upload", files=files, timeout=120)
+                except requests.exceptions.ConnectionError:
+                    st.error("Can't reach the backend. Is the FastAPI server running?")
+                    st.stop()
+                except requests.exceptions.Timeout:
+                    st.error("The request timed out. The document may be too large.")
+                    st.stop()
+                else:
+                    if response.status_code != 200:
+                        st.error(response.json()["detail"])
+                    else:
+                        data = response.json()
+                        st.session_state.document_id = data["document_id"]
+                        st.session_state.filename = data["filename"]
+                        st.rerun()
     else:
         st.success(f"📎 {st.session_state.filename}")
         if st.button("Upload a different document"):
@@ -69,13 +81,26 @@ else:
 
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
-                response = requests.post(
-                    f"{API_URL}/chat",
-                    params={"question": question, "document_id": st.session_state.document_id},
-                )
-                data = response.json()
-                answer = data["answer"]
-                sources = data["sources"]
+                try:
+                    response = requests.post(
+                        f"{API_URL}/chat",
+                        params={"question": question, "document_id": st.session_state.document_id},
+                        timeout=60,
+                    )
+                except requests.exceptions.ConnectionError:
+                    st.error("Can't reach the backend. Is the FastAPI server running?")
+                    st.stop()
+                except requests.exceptions.Timeout:
+                    st.error("The request timed out.")
+                    st.stop()
+                else:
+                    if response.status_code != 200:
+                        st.error(response.json()["detail"])
+                        st.stop()
+                    else:
+                        data = response.json()
+                        answer = data["answer"]
+                        sources = data["sources"]
 
             st.write(answer)
             with st.expander("View sources"):
