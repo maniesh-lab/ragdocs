@@ -1,3 +1,5 @@
+🔗 **[Live Demo](https://ragdocs.streamlit.app/)**
+
 # ragdocs
 A RAG (Retrieval-Augmented Generation) chatbot backend that ingests any PDF and
 answers questions about it in natural language — grounded in the document's
@@ -5,7 +7,7 @@ actual content, with page-level source citations, instead of hallucinated
 general knowledge.
 Built to demonstrate backend and applied-AI skills together: FastAPI for the
 API layer, a hand-rolled retrieval pipeline (no LangChain) for full control
-over chunking/embedding/retrieval, Chroma as the vector store, and Groq for
+over chunking/embedding/retrieval, Chroma as the vector store, and Gemini for
 fast, free-tier LLM inference — structured with a clean, modular architecture
 (api/services/core) suitable for real-world use.
 
@@ -16,7 +18,7 @@ fast, free-tier LLM inference — structured with a clean, modular architecture
 - Every answer includes page-level source citations with similarity scores
 - Per-document isolation — each upload gets its own vector collection, so multiple documents never bleed into each other's answers
 - Local embeddings (`sentence-transformers`) — no API cost or external call for the retrieval step
-- Free-tier LLM inference via Groq — no OpenAI spend required to run or demo
+- Free-tier LLM inference via Gemini — no paid API spend required to run or demo
 - Input validation — rejects non-PDF uploads and unreadable (scanned/image-only) PDFs with clear error messages
 - Graceful failure handling — clean errors instead of crashes if the backend is unreachable or a request times out
 - Interactive, self-documenting API via Swagger UI
@@ -37,7 +39,7 @@ ragdocs/
 │   │   ├── ingestion.py         # PDF → text → overlapping chunks
 │   │   ├── embeddings.py        # chunks → vectors (sentence-transformers)
 │   │   ├── vectorstore.py       # Chroma storage + similarity search
-│   │   └── llm.py               # prompt building + Groq inference
+│   │   └── llm.py               # prompt building + Gemini inference
 │   │
 │   └── main.py                  # FastAPI app, health check
 │
@@ -55,7 +57,6 @@ ragdocs/
 ├── .env.example
 ├── .gitignore
 ├── requirements.txt
-├── requirements.txt
 ├── LICENSE
 └── README.md
 ```
@@ -65,7 +66,7 @@ ragdocs/
 2. **Embedding** — each chunk is converted into a 384-dimensional vector locally via `sentence-transformers` (`all-MiniLM-L6-v2`) — no API call, runs on CPU
 3. **Storage** — chunks and vectors are stored in a dedicated Chroma collection per document, keyed by a generated `document_id`
 4. **Retrieval** — an incoming question is embedded the same way, and Chroma returns the 5 most semantically similar chunks
-5. **Generation** — those chunks are inserted into a prompt instructing the LLM to answer *only* from that context, then sent to Groq for a fast, grounded response
+5. **Generation** — those chunks are inserted into a prompt instructing the LLM to answer *only* from that context, then sent to Gemini for a fast, grounded response
 ---
 ## How to Run
 **1. Clone the repo**
@@ -86,7 +87,7 @@ pip install -r requirements.txt
 ```bash
 cp .env.example .env
 ```
-Add a free Groq API key from [console.groq.com](https://console.groq.com) to `.env`.
+Add a free Gemini API key from [aistudio.google.com](https://aistudio.google.com) to `.env`.
 
 **5. Start the backend**
 ```bash
@@ -135,7 +136,7 @@ curl -X POST "http://127.0.0.1:8000/chat?question=what+is+gradient+descent&docum
 | `fastapi` | API framework |
 | `chromadb` | Local vector database |
 | `sentence-transformers` | Local text embeddings |
-| `groq` | LLM inference (free tier) |
+| `google-genai` | LLM inference via Gemini (free tier) |
 | `streamlit` | Chat interface |
 | `pypdf` | PDF text extraction |
 | `pydantic-settings` | Configuration management |
