@@ -1,0 +1,122 @@
+[
+  {
+    "question": "What's the difference between training a model with batch learning versus online learning?",
+    "reference_answer": "Batch learning trains a model offline on the entire dataset at once, which means it cannot easily learn from new incoming data on the fly. Online learning trains the model incrementally using sequential data points or small mini-batches, letting it adapt rapidly to new data streams."
+  },
+  {
+    "question": "How do I know if my model is overfitting, and what can I do to fix it?",
+    "reference_answer": "Overfitting happens when a model performs great on the training set but generalizes poorly to new, unseen validation or test data. You can fix it by simplifying the model (regularization), gathering more training data, or cleaning up the training set to remove outliers."
+  },
+  {
+    "question": "Why is it better to use stratified sampling instead of just randomly splitting my dataset?",
+    "reference_answer": "Stratified sampling divides the population into subgroups (strata) and ensures each subgroup is represented in the correct proportion in both training and test sets. Purely random splits can lead to skewed, unrepresentative test sets, especially if the dataset is small."
+  },
+  {
+    "question": "What is a vision transformer and how does it treat images compared to a CNN?",
+    "reference_answer": "A vision transformer (ViT) chops an image into non-overlapping patches, flattens them into vectors, and processes them as a sequence of tokens using self-attention. Unlike CNNs, which have a built-in spatial bias for local pixel neighborhoods, a ViT lacks these inductive biases and must learn the spatial relationships between patches entirely from scratch, requiring much more training data."
+  },
+  {
+    "question": "Why do we need to scale numerical features, and what happens if we don't?",
+    "reference_answer": "Scaling is necessary because machine learning algorithms struggle when input attributes have very different scales, leading them to be biased toward features with larger ranges. Without feature scaling, a model might ignore highly predictive features simply because they have much smaller numerical values."
+  },
+  {
+    "question": "Can you explain what precision and recall mean in plain English?",
+    "reference_answer": "Precision is the accuracy of positive predictions (of all instances predicted as positive, how many are actually positive), whereas recall is the ratio of actual positives that the model successfully caught. They represent a trade-off where trying to improve one typically hurts the other."
+  },
+  {
+    "question": "How do the generator and discriminator work together to train a GAN?",
+    "reference_answer": "In a Generative Adversarial Network (GAN), the generator creates fake images from random noise while the discriminator tries to distinguish real images from the generator's fakes. They train in an adversarial game where the generator continuously improves to fool the discriminator, and the discriminator improves to catch the generator's fakes."
+  },
+  {
+    "question": "How does gradient descent actually work under the hood?",
+    "reference_answer": "Gradient descent is an optimization algorithm that iteratively tweaks a model's parameters to minimize a cost function. It does this by measuring the local gradient of the error with respect to the parameters and taking small steps in the direction of steepest descent."
+  },
+  {
+    "question": "When should I use Ridge regression versus Lasso regression?",
+    "reference_answer": "Ridge regression adds an L2 penalty to the cost function to constrain weight sizes but keeps all features, while Lasso regression adds an L1 penalty that can completely zero out coefficients of unimportant features, effectively performing automatic feature selection."
+  },
+  {
+    "question": "How does early stopping keep my model from overfitting?",
+    "reference_answer": "Early stopping works by monitoring the model's performance on a validation set during training and stopping the training process as soon as the validation error starts to rise. This prevents the model from continuing to adapt to random noise in the training set."
+  },
+  {
+    "question": "How does a decision tree determine where to split a node?",
+    "reference_answer": "A decision tree searches for a feature and a threshold that split the data into the purest possible subsets, typically by minimizing an impurity measure like Gini impurity or entropy."
+  },
+  {
+    "question": "What are the main parts of a reinforcement learning system, and what is a policy?",
+    "reference_answer": "A reinforcement learning system consists of an agent that observes states and takes actions within an environment, receiving positive or negative rewards in return. The policy is the algorithm or neural network the agent uses to determine which action to take next in any given situation."
+  },
+  {
+    "question": "What's the main idea behind a random forest?",
+    "reference_answer": "A random forest is an ensemble of decision trees, usually trained using bagging (bootstrap aggregating) to introduce random variations. By averaging the predictions of many diverse trees, it significantly reduces variance and delivers much more robust predictions."
+  },
+  {
+    "question": "What is out-of-bag evaluation in bagging?",
+    "reference_answer": "When using bagging, about 37% of the training instances are left out of each tree's training sample. Out-of-bag (OOB) evaluation uses these unused instances to validate each tree's performance, providing a built-in validation metric without needing a separate dataset."
+  },
+  {
+    "question": "How does gradient boosting combine models to make a prediction?",
+    "reference_answer": "Gradient boosting sequentially adds predictors to an ensemble, with each new model trained to predict the residual errors made by the previous model. The final prediction is the sum of the predictions from all the individual models."
+  },
+  {
+    "question": "What is the curse of dimensionality and why does it make ML harder?",
+    "reference_answer": "When features multiply, high-dimensional space becomes extremely sparse, making training data points very far apart from each other. This increases the risk of overfitting because models must make unreliable extrapolations across giant empty spaces."
+  },
+  {
+    "question": "How does PCA help me reduce the number of features in my dataset?",
+    "reference_answer": "Principal Component Analysis (PCA) identifies the axes of maximum variance in the dataset and projects the data onto a lower-dimensional subspace. This simplifies the dataset by throwing away the dimensions that contain the least information."
+  },
+  {
+    "question": "Is clustering just classification without labels?",
+    "reference_answer": "No, classification is a supervised task that assigns new data to predefined classes based on labeled training examples, whereas clustering is an unsupervised task that groups unlabeled data points into clusters based on natural similarities without any pre-existing labels."
+  },
+  {
+    "question": "How does DBSCAN find clusters in data, and how is it different from k-means?",
+    "reference_answer": "DBSCAN identifies clusters as continuous regions of high density separated by regions of low density. Unlike k-means, which assumes clusters are spherical and requires you to predefine the number of clusters, DBSCAN can find clusters of arbitrary shapes and automatically flags outliers as noise."
+  },
+  {
+    "question": "How does backpropagation actually train a neural network?",
+    "reference_answer": "Backpropagation calculates the output predictions in a forward pass, measures the prediction error, and then performs a backward pass using the chain rule to compute the gradient of the error for every parameter. It then uses these gradients in a gradient descent step to adjust the network's weights and biases."
+  },
+  {
+    "question": "What's the difference between a Dataset and a DataLoader in PyTorch?",
+    "reference_answer": "A Dataset is an object that wraps your raw data and defines how to retrieve individual samples by index. A DataLoader takes a Dataset and automates batching, shuffling, and multi-threaded loading, making it easy to feed data into a model during training."
+  },
+  {
+    "question": "What are the vanishing and exploding gradients problems, and why do they happen?",
+    "reference_answer": "In deep neural networks, gradients often shrink (vanish) or grow exponentially (explode) as they are backpropagated down to the lower layers. This happens because chaining many matrix multiplications and saturating activation functions can cause the error signals to either die out or saturate completely, preventing the lower layers from training."
+  },
+  {
+    "question": "How does transfer learning work in deep learning?",
+    "reference_answer": "Transfer learning involves taking a model that was pretrained on a massive, general dataset, keeping its feature-extracting layers, and replacing its final classification head to train on a new, smaller dataset. This saves enormous amounts of data and compute because the lower layers already know how to extract general features like shapes and edges."
+  },
+  {
+    "question": "How does dropout keep a neural network from overfitting?",
+    "reference_answer": "Dropout randomly turns off a percentage of neurons at each training step, forcing the remaining neurons to learn robust features without co-adapting with specific neighbors. This simulates training an ensemble of many smaller networks and prevents the model from memorizing the training data."
+  },
+  {
+    "question": "Why are CNNs better for images than regular dense networks?",
+    "reference_answer": "Dense networks flatten images and lose crucial spatial relationships between neighboring pixels, whereas CNNs use convolutional filters to process small, local pixel patches. CNNs also share weights across the image, which dramatically reduces the parameter count and makes them translation-invariant."
+  },
+  {
+    "question": "What is data augmentation and why is it useful?",
+    "reference_answer": "Data augmentation generates new training instances by applying random transformations like rotations, cropping, or brightness adjustments to your existing training images. This artificially expands your dataset and helps prevent the model from overfitting to specific image viewpoints."
+  },
+  {
+    "question": "What is the difference between a sequence-to-sequence and a sequence-to-vector RNN?",
+    "reference_answer": "A sequence-to-sequence RNN takes a sequence of inputs and produces a sequence of outputs at every time step (like translating a sentence or forecasting stock prices). A sequence-to-vector RNN takes a sequence of inputs but ignores all intermediate outputs, producing a single vector only at the very last time step (like predicting a sentiment score for a movie review)."
+  },
+  {
+    "question": "What is an attention mechanism in NLP and how does it help RNNs?",
+    "reference_answer": "An attention mechanism allows the decoder to directly access and focus on specific encoder hidden states at each step of translation. This creates a direct shortcut from the input words to the output words, allowing the model to handle long sentences without being limited by the short-term memory of RNNs."
+  },
+  {
+    "question": "What is the difference between self-attention and cross-attention in a transformer?",
+    "reference_answer": "Self-attention allows tokens within the same sequence to attend to each other to capture internal context (like words within the input sentence). Cross-attention allows the decoder tokens to attend to the output representations of the encoder, matching target tokens to their source language contexts."
+  },
+  {
+    "question": "What is the difference between Supervised Fine-Tuning (SFT) and Direct Preference Optimization (DPO)?",
+    "reference_answer": "Supervised Fine-Tuning (SFT) trains a base language model on a curated dataset of ideal instructions and responses using standard next-token prediction. Direct Preference Optimization (DPO) fine-tunes the model on pairs of chosen and rejected responses, training it to favor human-preferred answers without needing a complex reinforcement learning reward model."
+  }
+]

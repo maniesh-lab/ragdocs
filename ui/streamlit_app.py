@@ -3,7 +3,12 @@ import sys
 import uuid
 import streamlit as st
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
+
+try:
+    os.environ["GEMINI_API_KEY"] = st.secrets["GEMINI_API_KEY"]
+except (st.errors.StreamlitSecretNotFoundError, KeyError):
+    pass 
+
 from app.services.ingestion import process_document
 from app.services.embeddings import embed_chunks
 from app.services.vectorstore import add_chunks, query_chunks
