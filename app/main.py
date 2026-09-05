@@ -9,5 +9,5 @@ app.include_router(router)
 def health():
     return {
         "status":"ok",
-        "groq_key_loaded": bool(settings.groq_api_key)
+        "gemini_key_loaded": bool(settings.GEMINI_API_KEY)
     } 
