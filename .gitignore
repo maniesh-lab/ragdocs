@@ -7,3 +7,4 @@ data/chroma_db/*
 !data/chroma_db/.gitkeep
 __pycache__/
 *.pyc
+/test.py

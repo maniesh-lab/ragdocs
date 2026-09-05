@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings  #auto-reads values from env variables
 
 class Settings(BaseSettings):
-    groq_api_key: str  # has no defaults; crashes out if there's no value
+    GEMINI_API_KEY: str  # has no defaults; crashes out if there's no value
     chroma_persist_dir: str = "data/chroma_db" # has default
     upload_dir: str = "data/uploads"
 
