@@ -23,6 +23,7 @@ fast, free-tier LLM inference — structured with a clean, modular architecture
 - Graceful failure handling — clean errors instead of crashes if the backend is unreachable or a request times out
 - Interactive, self-documenting API via Swagger UI
 - Streamlit chat interface with persistent conversation history
+- Evaluated on a hand-written test set scoring faithfulness, relevancy, and correctness (see Evaluation below)
 ---
 ## Project Structure
 ```
@@ -46,9 +47,14 @@ ragdocs/
 ├── ui/
 │   └── streamlit_app.py         # chat interface
 │
+├── eval/
+│   ├── test_set.json            # 30 hand-written Q&A pairs
+│   ├── run_eval.py              # runs the test set through the real pipeline
+│   └── results/                 # saved raw answers + scores
+│
 ├── data/
 │   ├── uploads/                 # uploaded PDFs (gitignored)
-│   └── chroma_db/               # persisted vector store (gitignored)
+│   └── chroma_db/                 # persisted vector store (gitignored)
 │
 ├── screenshots/
 │   ├── swagger-docs.png
@@ -130,6 +136,31 @@ curl -X POST "http://127.0.0.1:8000/chat?question=what+is+gradient+descent&docum
 ```
 ![Chat interface](screenshots/chat-interface.png)
 ---
+## Evaluation
+The pipeline was tested against a hand-written set of 30 question/reference-answer
+pairs spanning the full range of a 500+ page ML textbook (basic concepts through
+deep learning and modern LLM fine-tuning). Every answer was scored by an LLM judge
+across three metrics:
+
+
+| Metric | Score |
+|---|---|
+| Faithfulness (answer only claims what the retrieved context supports) | 0.94 |
+| Relevancy (answer actually addresses the question) | 0.92 |
+| Correctness (answer matches the reference answer's meaning) | 0.91 |
+
+
+One question in the full set scored 0.0 across all three metrics — not because the
+model hallucinated, but because retrieval surfaced topically-adjacent chunks that
+never actually contained the answer, and the pipeline correctly responded "I don't
+know" rather than guess. This is the intended safety behavior (see Known
+Limitation below) showing up in practice, not a failure of the generation step.
+
+Reproducing the eval requires uploading the same source PDF first and using its
+resulting `document_id` in `eval/run_eval.py` — the committed results in
+`eval/results/` reflect the original test run.
+---
+
 ## Tech Stack
 | Tool | Purpose |
 |---|---|
@@ -141,6 +172,7 @@ curl -X POST "http://127.0.0.1:8000/chat?question=what+is+gradient+descent&docum
 | `pypdf` | PDF text extraction |
 | `pydantic-settings` | Configuration management |
 ---
+
 ## Use Case
 Built for anyone who needs quick, grounded answers from a long document — a
 manual, a textbook, a report — without manually searching through it page by

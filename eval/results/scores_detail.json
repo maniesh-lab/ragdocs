@@ -1,0 +1,182 @@
+[
+  {
+    "question": "What's the difference between training a model with batch learning versus online learning?",
+    "faithfulness": 0.95,
+    "relevancy": 1.0,
+    "correctness": 0.98
+  },
+  {
+    "question": "How do I know if my model is overfitting, and what can I do to fix it?",
+    "faithfulness": 0.97,
+    "relevancy": 1.0,
+    "correctness": 0.99
+  },
+  {
+    "question": "Why is it better to use stratified sampling instead of just randomly splitting my dataset?",
+    "faithfulness": 0.95,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "What is a vision transformer and how does it treat images compared to a CNN?",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "correctness": 0.75
+  },
+  {
+    "question": "Why do we need to scale numerical features, and what happens if we don't?",
+    "faithfulness": 0.0,
+    "relevancy": 0.0,
+    "correctness": 0.0
+  },
+  {
+    "question": "Can you explain what precision and recall mean in plain English?",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "How do the generator and discriminator work together to train a GAN?",
+    "faithfulness": 0.95,
+    "relevancy": 0.95,
+    "correctness": 0.95
+  },
+  {
+    "question": "How does gradient descent actually work under the hood?",
+    "faithfulness": 0.95,
+    "relevancy": 0.95,
+    "correctness": 0.95
+  },
+  {
+    "question": "When should I use Ridge regression versus Lasso regression?",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "How does early stopping keep my model from overfitting?",
+    "faithfulness": 0.95,
+    "relevancy": 0.95,
+    "correctness": 0.95
+  },
+  {
+    "question": "How does a decision tree determine where to split a node?",
+    "faithfulness": 0.95,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "What are the main parts of a reinforcement learning system, and what is a policy?",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "What's the main idea behind a random forest?",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "What is out-of-bag evaluation in bagging?",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "How does gradient boosting combine models to make a prediction?",
+    "faithfulness": 1.0,
+    "relevancy": 0.0,
+    "correctness": 0.0
+  },
+  {
+    "question": "What is the curse of dimensionality and why does it make ML harder?",
+    "faithfulness": 0.96,
+    "relevancy": 1.0,
+    "correctness": 0.96
+  },
+  {
+    "question": "How does PCA help me reduce the number of features in my dataset?",
+    "faithfulness": 0.95,
+    "relevancy": 0.95,
+    "correctness": 0.95
+  },
+  {
+    "question": "Is clustering just classification without labels?",
+    "faithfulness": 0.95,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "How does DBSCAN find clusters in data, and how is it different from k-means?",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "How does backpropagation actually train a neural network?",
+    "faithfulness": 0.98,
+    "relevancy": 0.98,
+    "correctness": 0.98
+  },
+  {
+    "question": "What's the difference between a Dataset and a DataLoader in PyTorch?",
+    "faithfulness": 0.95,
+    "relevancy": 0.95,
+    "correctness": 0.95
+  },
+  {
+    "question": "What are the vanishing and exploding gradients problems, and why do they happen?",
+    "faithfulness": 0.8,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "How does transfer learning work in deep learning?",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "How does dropout keep a neural network from overfitting?",
+    "faithfulness": 0.96,
+    "relevancy": 0.97,
+    "correctness": 0.96
+  },
+  {
+    "question": "Why are CNNs better for images than regular dense networks?",
+    "faithfulness": 0.9,
+    "relevancy": 1.0,
+    "correctness": 0.95
+  },
+  {
+    "question": "What is data augmentation and why is it useful?",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "What is the difference between a sequence-to-sequence and a sequence-to-vector RNN?",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "What is an attention mechanism in NLP and how does it help RNNs?",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "What is the difference between self-attention and cross-attention in a transformer?",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  },
+  {
+    "question": "What is the difference between Supervised Fine-Tuning (SFT) and Direct Preference Optimization (DPO)?",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "correctness": 1.0
+  }
+]

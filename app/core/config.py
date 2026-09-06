@@ -7,6 +7,7 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env"
+        extra = "ignore"
 
 
 settings = Settings() #every other file in the app imports this same object instead of re-reading env vars everywhere

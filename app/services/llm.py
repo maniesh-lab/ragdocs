@@ -22,7 +22,7 @@ def get_answer(question: str, matches: list[dict]) -> str:
     prompt = build_prompt(question, matches)
 
     interaction = client.interactions.create(
-        model="gemini-3-flash-preview",
+        model="gemini-3.8-flash",
         input=prompt,
     )
 

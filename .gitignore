@@ -1,4 +1,4 @@
-.venv/
+venv/
 .env
 data/uploads/*
 data/chroma_db/*
