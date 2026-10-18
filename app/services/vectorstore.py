@@ -1,10 +1,11 @@
 import chromadb
+from chromadb.errors import NotFoundError
 from app.core.config import settings
 from app.services.embeddings import model
 
 # A persistent client writes to disk (in the folder from settings), so our
 # stored embeddings survive between runs — we don't have to re-embed every
-# document each time we restart the app.client = chromadb.PersistentClient(path=settings.chroma_persist_dir)
+# document each time we restart the app.
 client = chromadb.PersistentClient(path=settings.chroma_persist_dir)
 
 # a "collection" is like a table.
@@ -18,8 +19,7 @@ def add_chunks(chunks: list[dict], document_id: str):
     collection = get_collection_for_document(document_id)
 
     # Chroma needs a unique string ID per entry. We build one from the
-    # source filename + page number + position in the list, so IDs never collide.
-    # PTR: source is just file_path - look in ingestion
+    # document_id + the chunk's position in the list, so IDs never collide.
     ids = [f"{document_id}-{i}" for i in range(len(chunks))]
 
     # Chroma wants plain lists, not numpy arrays — .tolist() converts each
@@ -39,7 +39,14 @@ def add_chunks(chunks: list[dict], document_id: str):
 
 def query_chunks(question: str,document_id:str, n_results: int = 5) -> list[dict]:
 
-    collection = get_collection_for_document(document_id)
+    # get_collection (not get_or_create) so an unknown document_id doesn't
+    # quietly create a new empty collection on disk for every bad request.
+    # Older Chroma versions raise ValueError here, newer ones NotFoundError.
+    try:
+        collection = client.get_collection(name=document_id)
+    except (NotFoundError, ValueError):
+        return []
+
     question_embedding = model.encode([question])[0].tolist()
 
     #.query is a function used to search for the closest vectors stored in collection above

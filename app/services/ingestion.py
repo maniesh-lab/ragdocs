@@ -27,7 +27,11 @@ def chunk_text(text:str, chunk_size:int = 200, overlap:int = 40) -> list[str]:
     return chunks
 
 
-def process_document(file_path:str) -> list[dict]:
+def process_document(file_path:str, display_name:str | None = None) -> list[dict]:
+    # display_name: the file's original name, shown as the source in answers.
+    # The file itself is saved under a generated ID (see routes.py), so
+    # file_path alone wouldn't tell the user which document a chunk came from.
+    source = display_name or file_path
 
     pages = extract_text_by_page(file_path)
 
@@ -42,7 +46,7 @@ def process_document(file_path:str) -> list[dict]:
         for chunk in chunk_text(page_text):
             all_chunks.append({
                 "text": chunk,
-                "source": file_path,
+                "source": source,
                 "page": page_num
             })
 

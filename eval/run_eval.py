@@ -8,7 +8,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app.services.vectorstore import query_chunks
 from app.services.llm import get_answer
 
-DOCUMENT_ID = "geron-ml-book"
+# Pass the document_id returned by /upload:  python eval/run_eval.py <document_id>
+# ("geron-ml-book" is the collection name used for the committed results.)
+DOCUMENT_ID = sys.argv[1] if len(sys.argv) > 1 else "geron-ml-book"
 RESULTS_PATH = "eval/results/raw_results.json"
 
 with open("eval/test_set.json") as f:

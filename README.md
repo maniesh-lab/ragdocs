@@ -15,11 +15,12 @@ fast, free-tier LLM inference — structured with a clean, modular architecture
 ## Features
 - Upload any PDF and ask natural-language questions about its content
 - Retrieval-augmented answers — the LLM only answers from chunks actually retrieved from the document, and says "I don't know" when the answer isn't present
-- Every answer includes page-level source citations with similarity scores
+- Every answer includes page-level source citations with a distance score for each chunk (lower = closer match)
 - Per-document isolation — each upload gets its own vector collection, so multiple documents never bleed into each other's answers
 - Local embeddings (`sentence-transformers`) — no API cost or external call for the retrieval step
 - Free-tier LLM inference via Gemini — no paid API spend required to run or demo
-- Input validation — rejects non-PDF uploads and unreadable (scanned/image-only) PDFs with clear error messages
+- Input validation — rejects non-PDF uploads, oversized files (50 MB default), corrupted PDFs, and unreadable (scanned/image-only) PDFs with clear error messages
+- Safe file handling — uploads are saved under a generated ID, never the client's filename, so a crafted name can't write outside the uploads folder and same-named uploads can't overwrite each other
 - Graceful failure handling — clean errors instead of crashes if the backend is unreachable or a request times out
 - Interactive, self-documenting API via Swagger UI
 - Streamlit chat interface with persistent conversation history
@@ -127,13 +128,16 @@ curl -X POST "http://127.0.0.1:8000/chat?question=what+is+gradient+descent&docum
   "sources": [
     {
       "text": "Gradient descent is a generic optimization algorithm capable of finding optimal solutions...",
-      "source": "data/uploads/your_document.pdf",
+      "source": "your_document.pdf",
       "page": 172,
       "distance": 0.803
     }
   ]
 }
 ```
+`distance` measures how far the chunk is from the question in embedding
+space — lower means a closer match.
+
 ![Chat interface](screenshots/chat-interface.png)
 ---
 ## Evaluation
@@ -156,9 +160,15 @@ never actually contained the answer, and the pipeline correctly responded "I don
 know" rather than guess. This is the intended safety behavior (see Known
 Limitation below) showing up in practice, not a failure of the generation step.
 
-Reproducing the eval requires uploading the same source PDF first and using its
-resulting `document_id` in `eval/run_eval.py` — the committed results in
-`eval/results/` reflect the original test run.
+Reproducing the eval requires uploading the same source PDF first, then passing
+its `document_id` to the eval script:
+
+```bash
+python eval/run_eval.py <document_id>
+python eval/score_eval.py   # needs GROQ_API_KEY in .env (the judge runs on Groq)
+```
+
+The committed results in `eval/results/` reflect the original test run.
 ---
 
 ## Tech Stack
@@ -190,7 +200,8 @@ cases rather than guess.
 
 ---
 ## Notes
-- Non-PDF files are rejected with a `400` error
+- Non-PDF files and corrupted PDFs are rejected with a `400` error; files over the size limit get a `413`
+- An unknown `document_id` on `/chat` returns a `404` without creating anything on disk
 - Scanned/image-only PDFs (no extractable text) are rejected with a clear error message
 - Each uploaded document is isolated in its own Chroma collection — multiple documents can be indexed without their content mixing in answers
 - No LangChain — the chunking, embedding, and retrieval pipeline is hand-written for full understanding and control over each step

@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import time
 from groq import Groq
 from dotenv import load_dotenv
@@ -53,8 +54,13 @@ Score these, respond with ONLY valid JSON, no other text:
                 messages=[{"role": "user", "content": judge_prompt}],
             )
             raw = response.choices[0].message.content
-            raw = raw.strip().strip("```json").strip("```").strip()
-            scores = json.loads(raw)
+            # Pull out the {...} part, in case the judge wrapped it in a
+            # ```json fence or added a sentence around it. (str.strip("```json")
+            # would strip any of those characters, not the word itself.)
+            match = re.search(r"\{.*\}", raw or "", re.DOTALL)
+            if not match:
+                raise ValueError(f"no JSON object in judge reply: {raw!r}")
+            scores = json.loads(match.group(0))
             break
         except Exception as e:
             print(f"  Retry {attempt+1}: {e}")

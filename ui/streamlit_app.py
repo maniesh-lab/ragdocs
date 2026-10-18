@@ -49,13 +49,16 @@ with st.sidebar:
             else:
                 with st.spinner("Reading and indexing document... this can take a minute for large files"):
                     document_id = str(uuid.uuid4())
-                    file_path = f"data/uploads/{uploaded_file.name}"
+                    # Saved under the generated ID, not the uploaded name, so
+                    # two visitors uploading "notes.pdf" don't overwrite each other.
+                    os.makedirs("data/uploads", exist_ok=True)
+                    file_path = f"data/uploads/{document_id}.pdf"
 
                     with open(file_path, "wb") as f:
                         f.write(uploaded_file.getvalue())
 
                     try:
-                        chunks = process_document(file_path)
+                        chunks = process_document(file_path, uploaded_file.name)
 
                         if len(chunks) == 0:
                             st.error("No readable text found in this PDF. It may be scanned/image-only.")
