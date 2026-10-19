@@ -120,6 +120,8 @@ The tests cover chunking, upload checks (file type, size, broken or scanned PDFs
 unsafe file names) and the chat endpoint. They swap the embedding model, Chroma
 and Gemini for stand-ins, so they run in seconds without an API key or the model
 download. Answer *quality* is measured separately by the evaluation below.
+GitHub Actions runs the tests, plus a `ruff` lint check, on Python 3.10–3.13 for
+every push.
 ---
 ## API Docs
 ![Swagger docs](screenshots/swagger-docs.png)
