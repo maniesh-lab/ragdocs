@@ -24,9 +24,9 @@ fast, free-tier LLM inference — structured with a clean, modular architecture
 - Free-tier LLM inference via Gemini — no paid API spend required to run or demo
 - Input validation — rejects non-PDF uploads, oversized files (50 MB default, checked by both the API and the chat UI), corrupted PDFs, and unreadable (scanned/image-only) PDFs with clear error messages
 - Safe file handling — uploads are saved under a generated ID, never the client's filename, so a crafted name can't write outside the uploads folder and same-named uploads can't overwrite each other
-- Graceful failure handling — clean errors instead of crashes if the backend is unreachable or a request times out
+- Graceful failure handling — if a PDF can't be processed or the Gemini call fails, the chat UI shows an error message instead of crashing
 - Interactive, self-documenting API via Swagger UI
-- Streamlit chat interface with persistent conversation history
+- Streamlit chat interface that calls the RAG pipeline directly (no backend needed) and keeps the conversation for the current browser session (cleared on refresh)
 - Evaluated on a hand-written test set scoring faithfulness, relevancy, and correctness (see Evaluation below)
 ---
 ## Project Structure
@@ -114,16 +114,17 @@ cp .env.example .env
 ```
 Add a free Gemini API key from [aistudio.google.com](https://aistudio.google.com) to `.env`.
 
-**5. Start the backend**
-```bash
-uvicorn app.main:app --reload
-```
-**6. Start the UI** (in a separate terminal)
+**5. Start the chat UI**
 ```bash
 streamlit run ui/streamlit_app.py
 ```
-**7. Try it out**
-Visit `http://127.0.0.1:8501` for the chat interface, or `http://127.0.0.1:8000/docs` to test the API directly via Swagger UI.
+Visit `http://127.0.0.1:8501`. The chat UI runs the pipeline itself, so it doesn't need the backend.
+
+**6. Start the API (optional)**
+```bash
+uvicorn app.main:app --reload
+```
+Only needed if you want to use the API directly. Visit `http://127.0.0.1:8000/docs` to try it in Swagger UI.
 
 **Run the tests**
 ```bash
