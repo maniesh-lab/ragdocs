@@ -212,6 +212,7 @@ The committed results in `eval/results/` reflect the original test run.
 | `pypdf` | PDF text extraction |
 | `pydantic-settings` | Configuration management |
 | `pytest` | Unit tests |
+| `ruff` | Lint check, run with the tests by GitHub Actions on every push |
 ---
 
 ## Use Case
