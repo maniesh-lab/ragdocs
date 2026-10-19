@@ -22,7 +22,7 @@ fast, free-tier LLM inference — structured with a clean, modular architecture
 - Per-document isolation — each upload gets its own vector collection, so multiple documents never bleed into each other's answers
 - Local embeddings (`sentence-transformers`) — no API cost or external call for the retrieval step
 - Free-tier LLM inference via Gemini — no paid API spend required to run or demo
-- Input validation — rejects non-PDF uploads, oversized files (50 MB default), corrupted PDFs, and unreadable (scanned/image-only) PDFs with clear error messages
+- Input validation — rejects non-PDF uploads, oversized files (50 MB default, checked by both the API and the chat UI), corrupted PDFs, and unreadable (scanned/image-only) PDFs with clear error messages
 - Safe file handling — uploads are saved under a generated ID, never the client's filename, so a crafted name can't write outside the uploads folder and same-named uploads can't overwrite each other
 - Graceful failure handling — clean errors instead of crashes if the backend is unreachable or a request times out
 - Interactive, self-documenting API via Swagger UI
