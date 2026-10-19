@@ -1,5 +1,7 @@
 # ragdocs
 
+[![CI](https://github.com/maniesh-lab/ragdocs/actions/workflows/ci.yml/badge.svg)](https://github.com/maniesh-lab/ragdocs/actions/workflows/ci.yml)
+
 🔗 **[Live Demo](https://ragdocs.streamlit.app/)**
 
 A RAG (Retrieval-Augmented Generation) chatbot backend that ingests any PDF and
