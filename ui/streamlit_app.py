@@ -9,6 +9,7 @@ try:
 except (st.errors.StreamlitSecretNotFoundError, KeyError):
     pass 
 
+from app.core.config import settings
 from app.services.ingestion import process_document
 from app.services.embeddings import embed_chunks
 from app.services.vectorstore import add_chunks, query_chunks
@@ -46,6 +47,9 @@ with st.sidebar:
         if uploaded_file is not None:
             if not uploaded_file.name.lower().endswith(".pdf"):
                 st.error("Only PDF files are supported.")
+            elif uploaded_file.size > settings.max_upload_mb * 1024 * 1024:
+                # Same limit as the API. Streamlit's own uploader allows up to 200 MB.
+                st.error(f"PDF is larger than {settings.max_upload_mb} MB.")
             else:
                 with st.spinner("Reading and indexing document... this can take a minute for large files"):
                     document_id = str(uuid.uuid4())
