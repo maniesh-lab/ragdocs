@@ -8,6 +8,7 @@ A RAG (Retrieval-Augmented Generation) chatbot backend that ingests any PDF and
 answers questions about it in natural language — grounded in the document's
 actual content, with page-level source citations, instead of hallucinated
 general knowledge.
+
 Built to demonstrate backend and applied-AI skills together: FastAPI for the
 API layer, a hand-rolled retrieval pipeline (no LangChain) for full control
 over chunking/embedding/retrieval, Chroma as the vector store, and Gemini for
@@ -189,7 +190,7 @@ One question in the full set scored 0.0 across all three metrics — not because
 model hallucinated, but because retrieval surfaced topically-adjacent chunks that
 never actually contained the answer, and the pipeline correctly responded "I don't
 know" rather than guess. This is the intended safety behavior (see Known
-Limitation below) showing up in practice, not a failure of the generation step.
+Limitations below) showing up in practice, not a failure of the generation step.
 
 Reproducing the eval requires uploading the same source PDF first, then passing
 its `document_id` to the eval script:
