@@ -4,16 +4,16 @@
 
 **[Live Demo](https://ragdocs.streamlit.app/)**
 
-A RAG (Retrieval-Augmented Generation) chatbot backend that ingests any PDF and
-answers questions about it in natural language — grounded in the document's
-actual content, with page-level source citations, instead of hallucinated
-general knowledge.
+A RAG (Retrieval-Augmented Generation) chatbot that answers questions about
+any PDF you upload. It answers only from what's in the document, shows the page
+each answer came from, and says "I don't know" when the answer isn't there,
+instead of making something up.
 
-Built to demonstrate backend and applied-AI skills together: FastAPI for the
-API layer, a hand-rolled retrieval pipeline (no LangChain) for full control
-over chunking/embedding/retrieval, Chroma as the vector store, and Gemini for
-fast, free-tier LLM inference — structured with a clean, modular architecture
-(api/services/core) suitable for real-world use.
+You can use it through a Streamlit chat UI or a FastAPI API. The retrieval part
+is written by hand (no LangChain): the PDF is split into overlapping chunks,
+embedded locally with sentence-transformers, stored in Chroma, and the closest
+chunks are sent to Gemini to write the answer. The code is split into `api`,
+`services` and `core`, so each step lives in its own file.
 
 ---
 ## Features
