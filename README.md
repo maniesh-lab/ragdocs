@@ -1,6 +1,7 @@
+# ragdocs
+
 🔗 **[Live Demo](https://ragdocs.streamlit.app/)**
 
-# ragdocs
 A RAG (Retrieval-Augmented Generation) chatbot backend that ingests any PDF and
 answers questions about it in natural language — grounded in the document's
 actual content, with page-level source citations, instead of hallucinated
