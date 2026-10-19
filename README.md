@@ -31,13 +31,17 @@ fast, free-tier LLM inference — structured with a clean, modular architecture
 ragdocs/
 │
 ├── app/
+│   ├── __init__.py
 │   ├── api/
+│   │   ├── __init__.py
 │   │   └── routes.py            # POST /upload, POST /chat
 │   │
 │   ├── core/
+│   │   ├── __init__.py
 │   │   └── config.py            # environment/settings (pydantic-settings)
 │   │
 │   ├── services/
+│   │   ├── __init__.py
 │   │   ├── ingestion.py         # PDF → text → overlapping chunks
 │   │   ├── embeddings.py        # chunks → vectors (sentence-transformers)
 │   │   ├── vectorstore.py       # Chroma storage + similarity search
@@ -51,21 +55,28 @@ ragdocs/
 ├── eval/
 │   ├── test_set.json            # 30 hand-written Q&A pairs
 │   ├── run_eval.py              # runs the test set through the real pipeline
-│   └── results/                 # saved raw answers + scores
+│   ├── score_eval.py            # grades the saved answers with a Groq model
+│   └── results/                 # raw_results.json, scores.json, scores_detail.json
 │
 ├── tests/                       # pytest unit tests (no model or API key needed)
+│   ├── conftest.py
+│   ├── helpers.py
+│   ├── test_api.py
+│   └── test_ingestion.py
 │
 ├── data/
-│   ├── uploads/                 # uploaded PDFs (gitignored)
-│   └── chroma_db/                 # persisted vector store (gitignored)
+│   ├── uploads/                 # uploaded PDFs (gitignored, .gitkeep only)
+│   └── chroma_db/               # persisted vector store (gitignored, .gitkeep only)
 │
 ├── screenshots/
 │   ├── swagger-docs.png
 │   └── chat-interface.png
 │
+├── .github/workflows/ci.yml     # lint + tests on every push
 ├── .env.example
 ├── .gitignore
 ├── pytest.ini
+├── ruff.toml                    # lint rules
 ├── requirements.txt
 ├── requirements-test.txt        # what the tests need
 ├── LICENSE
