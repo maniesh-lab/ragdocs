@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/maniesh-lab/ragdocs/actions/workflows/ci.yml/badge.svg)](https://github.com/maniesh-lab/ragdocs/actions/workflows/ci.yml)
 
-🔗 **[Live Demo](https://ragdocs.streamlit.app/)**
+**[Live Demo](https://ragdocs.streamlit.app/)**
 
 A RAG (Retrieval-Augmented Generation) chatbot backend that ingests any PDF and
 answers questions about it in natural language — grounded in the document's
@@ -221,7 +221,7 @@ page. Upload once, ask as many questions as needed, get answers with sources
 you can verify.
 
 ---
-## Known Limitation
+## Known Limitations
 RAG retrieves a handful of relevant *chunks*, not the whole document at once.
 This makes it strong at specific factual questions ("what is gradient
 descent?") but structurally unable to answer whole-document questions like
