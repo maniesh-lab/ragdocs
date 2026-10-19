@@ -53,6 +53,8 @@ ragdocs/
 │   ├── run_eval.py              # runs the test set through the real pipeline
 │   └── results/                 # saved raw answers + scores
 │
+├── tests/                       # pytest unit tests (no model or API key needed)
+│
 ├── data/
 │   ├── uploads/                 # uploaded PDFs (gitignored)
 │   └── chroma_db/                 # persisted vector store (gitignored)
@@ -63,7 +65,9 @@ ragdocs/
 │
 ├── .env.example
 ├── .gitignore
+├── pytest.ini
 ├── requirements.txt
+├── requirements-test.txt        # what the tests need
 ├── LICENSE
 └── README.md
 ```
@@ -106,6 +110,16 @@ streamlit run ui/streamlit_app.py
 ```
 **7. Try it out**
 Visit `http://127.0.0.1:8501` for the chat interface, or `http://127.0.0.1:8000/docs` to test the API directly via Swagger UI.
+
+**Run the tests**
+```bash
+pip install -r requirements-test.txt
+pytest
+```
+The tests cover chunking, upload checks (file type, size, broken or scanned PDFs,
+unsafe file names) and the chat endpoint. They swap the embedding model, Chroma
+and Gemini for stand-ins, so they run in seconds without an API key or the model
+download. Answer *quality* is measured separately by the evaluation below.
 ---
 ## API Docs
 ![Swagger docs](screenshots/swagger-docs.png)
@@ -181,6 +195,7 @@ The committed results in `eval/results/` reflect the original test run.
 | `streamlit` | Chat interface |
 | `pypdf` | PDF text extraction |
 | `pydantic-settings` | Configuration management |
+| `pytest` | Unit tests |
 ---
 
 ## Use Case
