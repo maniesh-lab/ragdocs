@@ -237,6 +237,7 @@ cases rather than guess.
 - Scanned/image-only PDFs (no extractable text) are rejected with a clear error message
 - Each uploaded document is isolated in its own Chroma collection — multiple documents can be indexed without their content mixing in answers
 - No LangChain — the chunking, embedding, and retrieval pipeline is hand-written for full understanding and control over each step
+- `torchvision` is in `requirements.txt` only for hosting on Streamlit. The app never uses it, but Streamlit's file watcher looks inside every loaded module, and that makes transformers (which sentence-transformers uses) try to load an image module that needs torchvision. Without it, the app logs `No module named 'torchvision'`
 ---
 ## Author
 **Manish Pandeya** · [github.com/maniesh-lab](https://github.com/maniesh-lab)
