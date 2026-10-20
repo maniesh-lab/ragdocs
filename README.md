@@ -87,7 +87,7 @@ ragdocs/
 ├── pytest.ini
 ├── ruff.toml                    # lint rules
 ├── requirements.txt
-├── requirements-test.txt        # what the tests need
+├── requirements-test.txt        # what the tests and lint check need
 ├── LICENSE
 └── README.md
 ```
@@ -142,6 +142,7 @@ Only needed if you want to use the API directly. Visit `http://127.0.0.1:8000/do
 ```bash
 pip install -r requirements-test.txt
 pytest
+ruff check .
 ```
 The tests cover chunking, upload checks (file type, size, broken or scanned PDFs,
 unsafe file names) and the chat endpoint. They swap the embedding model, Chroma
@@ -229,13 +230,17 @@ The committed results in `eval/results/` reflect the original test run.
 | Tool | Purpose |
 |---|---|
 | `fastapi` | API framework |
+| `uvicorn` | Runs the API server |
+| `python-multipart` | Lets FastAPI receive file uploads |
 | `chromadb` | Local vector database |
 | `sentence-transformers` | Local text embeddings |
 | `google-genai` | LLM inference via Gemini (free tier) |
 | `streamlit` | Chat interface |
 | `pypdf` | PDF text extraction |
 | `pydantic-settings` | Configuration management |
+| `groq` | Runs the LLM judge that scores the evaluation |
 | `pytest` | Unit tests |
+| `httpx`, `fpdf2` | Let the tests call the API and build small test PDFs |
 | `ruff` | Lint check, run with the tests by GitHub Actions on every push |
 
 ---
