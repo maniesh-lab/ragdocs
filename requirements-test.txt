@@ -1,4 +1,4 @@
-# What the tests need. The heavy parts of the app (sentence-transformers,
+# What the tests and lint check need. The heavy parts of the app (sentence-transformers,
 # Chroma, the Gemini client) are replaced with stand-ins in tests/conftest.py,
 # so they don't have to be installed to run the tests.
 fastapi
@@ -9,3 +9,4 @@ httpx
 numpy
 fpdf2
 pytest
+ruff
