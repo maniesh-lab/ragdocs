@@ -172,6 +172,8 @@ curl -X POST "http://127.0.0.1:8000/chat?question=what+is+gradient+descent&docum
   -H "accept: application/json"
 ```
 
+---
+
 ## Example Response
 
 ```json
@@ -254,17 +256,6 @@ you can verify.
 
 ---
 
-## Known Limitations
-
-RAG retrieves a handful of relevant *chunks*, not the whole document at once.
-This makes it strong at specific factual questions ("what is gradient
-descent?") but structurally unable to answer whole-document questions like
-"how many pages does this have?" or "which chapter is longest?" — no single
-chunk contains that answer. The app is designed to say "I don't know" in these
-cases rather than guess.
-
----
-
 ## Notes
 
 - Non-PDF files and corrupted PDFs are rejected with a `400` error; files over the size limit get a `413`
@@ -273,6 +264,17 @@ cases rather than guess.
 - Each uploaded document is isolated in its own Chroma collection — multiple documents can be indexed without their content mixing in answers
 - No LangChain — the chunking, embedding, and retrieval pipeline is hand-written for full understanding and control over each step
 - `torchvision` is in `requirements.txt` only for hosting on Streamlit. The app never uses it, but Streamlit's file watcher looks inside every loaded module, and that makes transformers (which sentence-transformers uses) try to load an image module that needs torchvision. Without it, the app logs `No module named 'torchvision'`
+
+---
+
+## Known Limitations
+
+RAG retrieves a handful of relevant *chunks*, not the whole document at once.
+This makes it strong at specific factual questions ("what is gradient
+descent?") but structurally unable to answer whole-document questions like
+"how many pages does this have?" or "which chapter is longest?" — no single
+chunk contains that answer. The app is designed to say "I don't know" in these
+cases rather than guess.
 
 ---
 
