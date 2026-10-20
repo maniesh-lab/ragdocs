@@ -16,7 +16,9 @@ chunks are sent to Gemini to write the answer. The code is split into `api`,
 `services` and `core`, so each step lives in its own file.
 
 ---
+
 ## Features
+
 - Upload any PDF and ask natural-language questions about its content
 - Retrieval-augmented answers — the LLM only answers from chunks actually retrieved from the document, and says "I don't know" when the answer isn't present
 - Every answer includes page-level source citations with a distance score for each chunk (lower = closer match)
@@ -29,8 +31,11 @@ chunks are sent to Gemini to write the answer. The code is split into `api`,
 - Interactive, self-documenting API via Swagger UI
 - Streamlit chat interface that calls the RAG pipeline directly (no backend needed) and keeps the conversation for the current browser session (cleared on refresh)
 - Evaluated on a hand-written test set scoring faithfulness, relevancy, and correctness (see Evaluation below)
+
 ---
+
 ## Project Structure
+
 ```
 ragdocs/
 │
@@ -86,15 +91,21 @@ ragdocs/
 ├── LICENSE
 └── README.md
 ```
+
 ---
+
 ## How It Works
+
 1. **Ingestion** — the PDF is split page by page, then chunked into overlapping ~200-word segments so no sentence is lost at a chunk boundary
 2. **Embedding** — each chunk is converted into a 384-dimensional vector locally via `sentence-transformers` (`all-MiniLM-L6-v2`) — no API call, runs on CPU
 3. **Storage** — chunks and vectors are stored in a dedicated Chroma collection per document, keyed by a generated `document_id`
 4. **Retrieval** — an incoming question is embedded the same way, and Chroma returns the 5 most semantically similar chunks
 5. **Generation** — those chunks are inserted into a prompt instructing the LLM to answer *only* from that context, then sent to Gemini for a fast, grounded response
+
 ---
+
 ## How to Run
+
 **1. Clone the repo**
 ```bash
 git clone https://github.com/maniesh-lab/ragdocs
@@ -138,11 +149,17 @@ and Gemini for stand-ins, so they run in seconds without an API key or the model
 download. Answer *quality* is measured separately by the evaluation below.
 GitHub Actions runs the tests, plus a `ruff` lint check, on Python 3.10–3.13 for
 every push.
+
 ---
+
 ## API Docs
+
 ![Swagger docs](screenshots/swagger-docs.png)
+
 ---
+
 ## Example Request
+
 ```bash
 curl -X POST "http://127.0.0.1:8000/upload" \
   -H "accept: application/json" \
@@ -153,7 +170,9 @@ curl -X POST "http://127.0.0.1:8000/upload" \
 curl -X POST "http://127.0.0.1:8000/chat?question=what+is+gradient+descent&document_id=YOUR_DOCUMENT_ID" \
   -H "accept: application/json"
 ```
+
 ## Example Response
+
 ```json
 {
   "answer": "Gradient descent is a generic optimization algorithm that iteratively adjusts a model's parameters to minimize a cost function...",
@@ -171,20 +190,21 @@ curl -X POST "http://127.0.0.1:8000/chat?question=what+is+gradient+descent&docum
 space — lower means a closer match.
 
 ![Chat interface](screenshots/chat-interface.png)
+
 ---
+
 ## Evaluation
+
 The pipeline was tested against a hand-written set of 30 question/reference-answer
 pairs spanning the full range of a 500+ page ML textbook (basic concepts through
 deep learning and modern LLM fine-tuning). Every answer was scored by an LLM judge
 across three metrics:
-
 
 | Metric | Score |
 |---|---|
 | Faithfulness (answer only claims what the retrieved context supports) | 0.94 |
 | Relevancy (answer actually addresses the question) | 0.92 |
 | Correctness (answer matches the reference answer's meaning) | 0.91 |
-
 
 One question in the full set scored 0.0 across all three metrics — not because the
 model hallucinated, but because retrieval surfaced topically-adjacent chunks that
@@ -201,9 +221,11 @@ python eval/score_eval.py   # needs GROQ_API_KEY in .env (the judge runs on Groq
 ```
 
 The committed results in `eval/results/` reflect the original test run.
+
 ---
 
 ## Tech Stack
+
 | Tool | Purpose |
 |---|---|
 | `fastapi` | API framework |
@@ -215,16 +237,20 @@ The committed results in `eval/results/` reflect the original test run.
 | `pydantic-settings` | Configuration management |
 | `pytest` | Unit tests |
 | `ruff` | Lint check, run with the tests by GitHub Actions on every push |
+
 ---
 
 ## Use Case
+
 Built for anyone who needs quick, grounded answers from a long document — a
 manual, a textbook, a report — without manually searching through it page by
 page. Upload once, ask as many questions as needed, get answers with sources
 you can verify.
 
 ---
+
 ## Known Limitations
+
 RAG retrieves a handful of relevant *chunks*, not the whole document at once.
 This makes it strong at specific factual questions ("what is gradient
 descent?") but structurally unable to answer whole-document questions like
@@ -233,13 +259,18 @@ chunk contains that answer. The app is designed to say "I don't know" in these
 cases rather than guess.
 
 ---
+
 ## Notes
+
 - Non-PDF files and corrupted PDFs are rejected with a `400` error; files over the size limit get a `413`
 - An unknown `document_id` on `/chat` returns a `404` without creating anything on disk
 - Scanned/image-only PDFs (no extractable text) are rejected with a clear error message
 - Each uploaded document is isolated in its own Chroma collection — multiple documents can be indexed without their content mixing in answers
 - No LangChain — the chunking, embedding, and retrieval pipeline is hand-written for full understanding and control over each step
 - `torchvision` is in `requirements.txt` only for hosting on Streamlit. The app never uses it, but Streamlit's file watcher looks inside every loaded module, and that makes transformers (which sentence-transformers uses) try to load an image module that needs torchvision. Without it, the app logs `No module named 'torchvision'`
+
 ---
+
 ## Author
+
 **Manish Pandeya** · [github.com/maniesh-lab](https://github.com/maniesh-lab)
