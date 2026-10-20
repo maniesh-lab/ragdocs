@@ -55,8 +55,8 @@ with st.sidebar:
                     document_id = str(uuid.uuid4())
                     # Saved under the generated ID, not the uploaded name, so
                     # two visitors uploading "notes.pdf" don't overwrite each other.
-                    os.makedirs("data/uploads", exist_ok=True)
-                    file_path = f"data/uploads/{document_id}.pdf"
+                    os.makedirs(settings.upload_dir, exist_ok=True)
+                    file_path = os.path.join(settings.upload_dir, f"{document_id}.pdf")
 
                     with open(file_path, "wb") as f:
                         f.write(uploaded_file.getvalue())
